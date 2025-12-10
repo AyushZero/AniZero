@@ -1,42 +1,4 @@
-[
-    {
-        "filename": "image1.jpg",
-        "answers": ["Naruto", "Naruto Uzumaki"],
-        "hints": [
-            "Popular ninja anime",
-            "Has a nine-tailed fox inside"
-        ]
-    },
-    {
-        "filename": "image2.jpg",
-        "answers": ["Goku", "Son Goku"],
-        "hints": [
-            "Dragon Ball series",
-            "Saiyan warrior"
-        ]
-    },
-    {
-        "filename": "image3.jpg",
-        "answers": ["Luffy", "Monkey D. Luffy"],
-        "hints": [
-            "Pirate anime",
-            "Wants to be King of the Pirates"
-        ]
-    },
-    {
-        "filename": "image4.jpg",
-        "answers": ["Eren", "Eren Yeager"],
-        "hints": [
-            "Attack on Titan",
-            "Can transform into a titan"
-        ]
-    },
-    {
-        "filename": "image5.jpg",
-        "answers": ["Light", "Light Yagami"],
-        "hints": [
-            "Death Note series",
-            "Has a mysterious notebook"
-        ]
-    }
-]
+{
+    "anime": "naruto",
+    "image": "image1.png"
+}

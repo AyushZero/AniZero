@@ -3,41 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Quiz - Guess the Character</title>
+    <title>Anime Quiz</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎌 Anime Quiz</h1>
-            <div class="stats">
-                <span>Image: <span id="current-image">1</span>/<span id="total-images">5</span></span>
-                <span>Tries: <span id="tries">0</span>/5</span>
-                <span>Score: <span id="score">0</span></span>
-            </div>
-        </header>
-
-        <main class="quiz-area">
-            <div class="image-container">
-                <img id="anime-image" src="" alt="Guess the anime character">
-            </div>
-
-            <div class="controls">
-                <input type="text" id="answer-input" placeholder="Enter character or anime name..." autocomplete="off">
-                <button id="submit-btn">Submit Guess</button>
-                <button id="skip-btn">Skip</button>
-            </div>
-
-            <div id="feedback" class="feedback"></div>
-            <div id="hint" class="hint"></div>
-        </main>
-
-        <div id="results" class="results hidden">
-            <h2>Quiz Complete!</h2>
-            <p class="final-score">Final Score: <span id="final-score">0</span></p>
-            <button id="restart-btn">Play Again</button>
-        </div>
+    <div class="image-container">
+        <img id="anime-image" src="./images/image1.png" alt="">
     </div>
+
+    <div class="controls">
+        <input type="text" id="answer-input" placeholder="guess the anime" autocomplete="off">
+        <button id="submit-btn">submit</button>
+    </div>
+
+    <div class="powerups">
+        <button id="hint-btn" class="powerup">first letters (-1000)</button>
+        <button id="zoom-btn" class="powerup">zoom out (-500)</button>
+    </div>
+
+    <div id="points">2000</div>
+    <div id="feedback"></div>
 
     <script src="script.js"></script>
 </body>
