@@ -3,17 +3,18 @@ const input = document.getElementById('answer-input');
 const submitBtn = document.getElementById('submit-btn');
 const hintBtn = document.getElementById('hint-btn');
 const zoomBtn = document.getElementById('zoom-btn');
+const skipBtn = document.getElementById('skip-btn');
 const pointsDisplay = document.getElementById('points');
 const feedback = document.getElementById('feedback');
 const questionNumber = document.getElementById('question-number');
 
-// Quiz data - pairs of images (odd=zoomed, even=full)
+// Quiz data - pairs of images (zoomed and full versions)
 const quizData = [
-    { zoomed: '1 (1).png', full: '1 (2).png', answer: 'love is war' },
-    { zoomed: '1 (3).png', full: '1 (4).png', answer: 'demon slayer' },
-    { zoomed: '1 (5).png', full: '1 (6).png', answer: 'attack on titan' },
-    { zoomed: '1 (7).png', full: '1 (8).png', answer: 'naruto' },
-    { zoomed: '1 (9).png', full: '1 (10).png', answer: 'one piece' }
+    { zoomed: '001-naruto-zoomed.png', full: '001-naruto-full.png', answer: 'naruto' },
+    { zoomed: '002-boruto-zoomed.png', full: '002-boruto-full.png', answer: 'boruto' },
+    { zoomed: '003-noragami-zoomed.png', full: '003-noragami-full.png', answer: 'noragami' },
+    { zoomed: '004-kaguya-zoomed.png', full: '004-kaguya-full.png', answer: 'kaguya' },
+    { zoomed: '005-bleach-zoomed.png', full: '005-bleach-full.png', answer: 'bleach' }
 ];
 
 let currentQuestion = 0;
@@ -44,6 +45,7 @@ function initQuestion() {
     submitBtn.disabled = false;
     hintBtn.disabled = false;
     zoomBtn.disabled = false;
+    skipBtn.disabled = false;
     image.classList.remove('zoomed-out');
 }
 
@@ -84,12 +86,14 @@ function checkAnswer() {
     const correctAnswer = quizData[currentQuestion].answer.toLowerCase();
     
     if (userAnswer === correctAnswer) {
-        totalPoints += questionPoints;
         feedback.textContent = `correct! +${questionPoints} points`;
         input.disabled = true;
         submitBtn.disabled = true;
         hintBtn.disabled = true;
         zoomBtn.disabled = true;
+        skipBtn.disabled = true;
+        
+        totalPoints += questionPoints;
         
         const current = quizData[currentQuestion];
         image.src = `./images/${current.full}`;
@@ -101,9 +105,27 @@ function checkAnswer() {
         }, 2000);
     } else {
         feedback.textContent = 'wrong, try again';
-        input.value = '';
     }
 }
+
+// Skip button
+skipBtn.addEventListener('click', () => {
+    const current = quizData[currentQuestion];
+    feedback.textContent = `skipped! answer: ${current.answer}`;
+    input.disabled = true;
+    submitBtn.disabled = true;
+    hintBtn.disabled = true;
+    zoomBtn.disabled = true;
+    skipBtn.disabled = true;
+    
+    image.src = `./images/${current.full}`;
+    image.classList.add('zoomed-out');
+    
+    setTimeout(() => {
+        currentQuestion++;
+        initQuestion();
+    }, 2500);
+});
 
 function showFinalScore() {
     questionNumber.textContent = 'quiz complete!';

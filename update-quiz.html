@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Quiz Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #000;
+            color: #fff;
+            font-family: monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .instructions {
+            text-align: left;
+            border: 2px solid #fff;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+        .instructions li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        label {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 2px solid #fff;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+        label:hover {
+            background: #fff;
+            color: #000;
+        }
+        #output {
+            margin-top: 30px;
+            text-align: left;
+            border: 2px solid #fff;
+            padding: 20px;
+            background: #111;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        button {
+            padding: 15px 40px;
+            background: #000;
+            border: 2px solid #fff;
+            color: #fff;
+            font-family: monospace;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #fff;
+            color: #000;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>quiz data updater</h1>
+        
+        <div class="instructions">
+            <h3>How to use:</h3>
+            <ol>
+                <li>Put 10 images in the images folder (5 pairs)</li>
+                <li>Name them: anime-name-zoomed.png and anime-name-full.png</li>
+                <li>Click "Select images folder" and choose the images folder</li>
+                <li>Copy the generated code and paste into script.js</li>
+            </ol>
+        </div>
+
+        <input type="file" id="folder-input" webkitdirectory directory multiple>
+        <label for="folder-input">select images folder</label>
+
+        <div id="output" class="hidden"></div>
+        <button id="copy-btn" class="hidden">copy to clipboard</button>
+    </div>
+
+    <script>
+        const folderInput = document.getElementById('folder-input');
+        const output = document.getElementById('output');
+        const copyBtn = document.getElementById('copy-btn');
+        let generatedCode = '';
+
+        folderInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            const imageFiles = files.filter(f => 
+                f.type.startsWith('image/') ||
+                f.name.endsWith('.png') || 
+                f.name.endsWith('.jpg') || 
+                f.name.endsWith('.jpeg') ||
+                f.name.includes('-zoomed') ||
+                f.name.includes('-full')
+            );
+
+            if (imageFiles.length === 0) {
+                alert('No image files found');
+                return;
+            }
+
+            // Group files into pairs
+            const pairs = [];
+            const processed = new Set();
+
+            imageFiles.forEach(file => {
+                if (processed.has(file.name)) return;
+
+                const name = file.name;
+                let animeName, isZoomed;
+
+                // Handle files with or without extensions
+                if (name.includes('-zoomed')) {
+                    animeName = name.split('-zoomed')[0];
+                    isZoomed = true;
+                } else if (name.includes('-full')) {
+                    animeName = name.split('-full')[0];
+                    isZoomed = false;
+                } else {
+                    return; // Skip files that don't match pattern
+                }
+
+                // Find the pair (with or without extension)
+                const zoomed = imageFiles.find(f => f.name.startsWith(`${animeName}-zoomed`));
+                const full = imageFiles.find(f => f.name.startsWith(`${animeName}-full`));
+
+                if (zoomed && full && !processed.has(zoomed.name)) {
+                    const readableName = animeName
+                        .replace(/-/g, ' ')
+                        .replace(/^\d+\s*/, '')
+                        .trim();
+
+                    pairs.push({
+                        anime: readableName,
+                        zoomed: zoomed.name,
+                        full: full.name
+                    });
+
+                    processed.add(zoomed.name);
+                    processed.add(full.name);
+                }
+            });
+
+            if (pairs.length === 0) {
+                alert('No matching pairs found. Make sure files are named: anime-name-zoomed.png and anime-name-full.png');
+                return;
+            }
+
+            // Generate code
+            generatedCode = `// Quiz data - pairs of images (odd=zoomed, even=full)\nconst quizData = [\n`;
+            
+            pairs.forEach((pair, index) => {
+                generatedCode += `    { zoomed: '${pair.zoomed}', full: '${pair.full}', answer: '${pair.anime}' }`;
+                if (index < pairs.length - 1) {
+                    generatedCode += ',';
+                }
+                generatedCode += '\n';
+            });
+            
+            generatedCode += '];\n\n';
+            generatedCode += `// Found ${pairs.length} pairs:\n`;
+            pairs.forEach((pair, i) => {
+                generatedCode += `// ${i + 1}. ${pair.anime}\n`;
+            });
+
+            output.textContent = generatedCode;
+            output.classList.remove('hidden');
+            copyBtn.classList.remove('hidden');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(generatedCode).then(() => {
+                copyBtn.textContent = 'copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = 'copy to clipboard';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

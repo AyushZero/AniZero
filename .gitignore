@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.log
+*.tmp
+.cache/
+
+# User data (keep template structure)
+images/*.png
+images/*.jpg
+images/*.jpeg
+images/*.gif
+images/*.webp
+!images/.gitkeep
+
+# Keep metadata
+!images/metadata.json
+
+# Backup files
+*.bak
+*.backup
