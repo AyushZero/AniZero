@@ -35,9 +35,8 @@ function initQuestion() {
     
     questionPoints = 2000;
     hintUsed = false;
-    zoomUsed = false;
-    
-    questionNumber.textContent = `question ${currentQuestion + 1}/5`;
+    questionPoints = 2000;
+    hintUsed = false;xtContent = `question ${currentQuestion + 1}/5`;
     pointsDisplay.textContent = `${questionPoints} points`;
     feedback.textContent = '';
     input.value = '';
@@ -46,7 +45,6 @@ function initQuestion() {
     hintBtn.disabled = false;
     zoomBtn.disabled = false;
     skipBtn.disabled = false;
-    image.classList.remove('zoomed-out');
 }
 
 // Hint button
@@ -74,7 +72,6 @@ zoomBtn.addEventListener('click', () => {
     
     const current = quizData[currentQuestion];
     image.src = `./images/${current.full}`;
-    image.classList.add('zoomed-out');
 });
 
 // Submit answer
@@ -97,7 +94,6 @@ function checkAnswer() {
         
         const current = quizData[currentQuestion];
         image.src = `./images/${current.full}`;
-        image.classList.add('zoomed-out');
         
         setTimeout(() => {
             currentQuestion++;
@@ -119,7 +115,6 @@ skipBtn.addEventListener('click', () => {
     skipBtn.disabled = true;
     
     image.src = `./images/${current.full}`;
-    image.classList.add('zoomed-out');
     
     setTimeout(() => {
         currentQuestion++;
@@ -136,6 +131,7 @@ function showFinalScore() {
     submitBtn.style.display = 'none';
     hintBtn.style.display = 'none';
     zoomBtn.style.display = 'none';
+    skipBtn.style.display = 'none';
 }
 
 submitBtn.addEventListener('click', checkAnswer);
