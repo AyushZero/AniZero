@@ -126,12 +126,44 @@ function showFinalScore() {
     questionNumber.textContent = 'quiz complete!';
     pointsDisplay.textContent = `final score: ${totalPoints}/10000`;
     feedback.textContent = '';
-    image.style.display = 'none';
+    
+    // Hide quiz controls
     input.style.display = 'none';
     submitBtn.style.display = 'none';
     hintBtn.style.display = 'none';
     zoomBtn.style.display = 'none';
     skipBtn.style.display = 'none';
+    document.querySelector('.powerups').style.display = 'none';
+    
+    // Show results grid
+    const container = document.querySelector('.image-container');
+    container.innerHTML = '';
+    container.style.width = '100%';
+    container.style.height = 'auto';
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+    container.style.gap = '20px';
+    container.style.padding = '20px';
+    
+    quizData.forEach((item) => {
+        const resultItem = document.createElement('div');
+        resultItem.style.textAlign = 'center';
+        
+        const img = document.createElement('img');
+        img.src = `./images/${item.full}`;
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        img.style.border = '2px solid #fff';
+        
+        const answer = document.createElement('div');
+        answer.textContent = item.answer;
+        answer.style.marginTop = '10px';
+        answer.style.fontSize = '16px';
+        
+        resultItem.appendChild(img);
+        resultItem.appendChild(answer);
+        container.appendChild(resultItem);
+    });
 }
 
 submitBtn.addEventListener('click', checkAnswer);
