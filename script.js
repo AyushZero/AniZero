@@ -5,22 +5,59 @@ const hintBtn = document.getElementById('hint-btn');
 const zoomBtn = document.getElementById('zoom-btn');
 const pointsDisplay = document.getElementById('points');
 const feedback = document.getElementById('feedback');
+const questionNumber = document.getElementById('question-number');
 
-let points = 2000;
+// Quiz data - pairs of images (odd=zoomed, even=full)
+const quizData = [
+    { zoomed: '1 (1).png', full: '1 (2).png', answer: 'love is war' },
+    { zoomed: '1 (3).png', full: '1 (4).png', answer: 'demon slayer' },
+    { zoomed: '1 (5).png', full: '1 (6).png', answer: 'attack on titan' },
+    { zoomed: '1 (7).png', full: '1 (8).png', answer: 'naruto' },
+    { zoomed: '1 (9).png', full: '1 (10).png', answer: 'one piece' }
+];
+
+let currentQuestion = 0;
+let totalPoints = 0;
+let questionPoints = 2000;
 let hintUsed = false;
 let zoomUsed = false;
-let correctAnswer = 'naruto'; // Change this to your anime name
 
-// Hint button - shows first letters
+// Initialize quiz
+function initQuestion() {
+    if (currentQuestion >= quizData.length) {
+        showFinalScore();
+        return;
+    }
+
+    const current = quizData[currentQuestion];
+    image.src = `./images/${current.zoomed}`;
+    
+    questionPoints = 2000;
+    hintUsed = false;
+    zoomUsed = false;
+    
+    questionNumber.textContent = `question ${currentQuestion + 1}/5`;
+    pointsDisplay.textContent = `${questionPoints} points`;
+    feedback.textContent = '';
+    input.value = '';
+    input.disabled = false;
+    submitBtn.disabled = false;
+    hintBtn.disabled = false;
+    zoomBtn.disabled = false;
+    image.classList.remove('zoomed-out');
+}
+
+// Hint button
 hintBtn.addEventListener('click', () => {
     if (hintUsed) return;
     
     hintUsed = true;
-    points -= 1000;
-    pointsDisplay.textContent = points;
+    questionPoints -= 1000;
+    pointsDisplay.textContent = `${questionPoints} points`;
     hintBtn.disabled = true;
     
-    const firstLetters = correctAnswer.split(' ').map(word => word[0]).join(' ');
+    const answer = quizData[currentQuestion].answer;
+    const firstLetters = answer.split(' ').map(word => word[0]).join(' ');
     feedback.textContent = `first letters: ${firstLetters}`;
 });
 
@@ -29,10 +66,12 @@ zoomBtn.addEventListener('click', () => {
     if (zoomUsed) return;
     
     zoomUsed = true;
-    points -= 500;
-    pointsDisplay.textContent = points;
+    questionPoints -= 500;
+    pointsDisplay.textContent = `${questionPoints} points`;
     zoomBtn.disabled = true;
     
+    const current = quizData[currentQuestion];
+    image.src = `./images/${current.full}`;
     image.classList.add('zoomed-out');
 });
 
@@ -42,20 +81,45 @@ function checkAnswer() {
     
     if (!userAnswer) return;
     
-    if (userAnswer === correctAnswer.toLowerCase()) {
-        feedback.textContent = `correct! final score: ${points}`;
+    const correctAnswer = quizData[currentQuestion].answer.toLowerCase();
+    
+    if (userAnswer === correctAnswer) {
+        totalPoints += questionPoints;
+        feedback.textContent = `correct! +${questionPoints} points`;
         input.disabled = true;
         submitBtn.disabled = true;
         hintBtn.disabled = true;
         zoomBtn.disabled = true;
+        
+        const current = quizData[currentQuestion];
+        image.src = `./images/${current.full}`;
         image.classList.add('zoomed-out');
+        
+        setTimeout(() => {
+            currentQuestion++;
+            initQuestion();
+        }, 2000);
     } else {
         feedback.textContent = 'wrong, try again';
         input.value = '';
     }
 }
 
+function showFinalScore() {
+    questionNumber.textContent = 'quiz complete!';
+    pointsDisplay.textContent = `final score: ${totalPoints}/10000`;
+    feedback.textContent = '';
+    image.style.display = 'none';
+    input.style.display = 'none';
+    submitBtn.style.display = 'none';
+    hintBtn.style.display = 'none';
+    zoomBtn.style.display = 'none';
+}
+
 submitBtn.addEventListener('click', checkAnswer);
 input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') checkAnswer();
 });
+
+// Start quiz
+initQuestion();

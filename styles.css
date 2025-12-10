@@ -13,13 +13,19 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     padding: 20px;
+    overflow: hidden;
+}
+
+#question-number {
+    font-size: 18px;
+    text-transform: uppercase;
 }
 
 .image-container {
-    width: 896px;
-    height: 504px;
+    width: 768px;
+    height: 432px;
     overflow: hidden;
     position: relative;
 }
