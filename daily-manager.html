@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quiz Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #000;
+            color: #fff;
+            font-family: monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+            letter-spacing: 2px;
+        }
+        .step {
+            border: 2px solid #fff;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .step h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .step-content {
+            line-height: 1.8;
+        }
+        .step ol {
+            margin-left: 20px;
+        }
+        .step li {
+            margin: 10px 0;
+        }
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button, a.button {
+            background: #000;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 12px 24px;
+            font-family: monospace;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        button:hover, a.button:hover {
+            background: #fff;
+            color: #000;
+        }
+        .shortcut {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        code {
+            background: #222;
+            padding: 2px 6px;
+            border: 1px solid #444;
+        }
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .workflow-card {
+            border: 1px solid #444;
+            padding: 20px;
+            text-align: center;
+        }
+        .workflow-card h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #888;
+        }
+        .workflow-card p {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DAILY QUIZ MANAGER</h1>
+
+        <div class="step">
+            <h2>STEP 1: Prepare Images</h2>
+            <div class="step-content">
+                <p>Take screenshots while watching anime and prepare them for the quiz.</p>
+                <div class="button-group">
+                    <a href="prep-tool/index.html" class="button">Open Prep Tool</a>
+                </div>
+                <div class="shortcut">
+                    Upload screenshots → Name anime → Crop zoomed area → Download
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2>STEP 2: Extract & Replace Images</h2>
+            <div class="step-content">
+                <ol>
+                    <li>Extract the downloaded <code>anime-quiz-images.zip</code></li>
+                    <li>Delete all images from the <code>images/</code> folder</li>
+                    <li>Copy 10 new images (5 pairs) to the <code>images/</code> folder</li>
+                </ol>
+                <div class="button-group">
+                    <button onclick="openFolder()">Open Images Folder</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2>STEP 3: Update Quiz Data (Automatic)</h2>
+            <div class="step-content">
+                <p>Automatically update quiz with your new images.</p>
+                <div class="button-group">
+                    <button onclick="autoUpdate()">Auto Update (Node.js)</button>
+                    <a href="auto-update-quiz.html" class="button">Auto Update (Browser)</a>
+                </div>
+                <div class="shortcut">
+                    Node.js: Instant update | Browser: Download updated script.js
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2>STEP 4: Test & Deploy</h2>
+            <div class="step-content">
+                <div class="button-group">
+                    <a href="index.html" class="button">Test Quiz</a>
+                    <button onclick="commitAndPush()">Git Commit & Push</button>
+                </div>
+                <div class="shortcut">
+                    Test locally → Commit changes → Push to GitHub
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2>Quick Workflow</h2>
+            <div class="workflow">
+                <div class="workflow-card">
+                    <h3>SCREENSHOTS</h3>
+                    <p>Take 5+ anime screenshots</p>
+                </div>
+                <div class="workflow-card">
+                    <h3>PREP TOOL</h3>
+                    <p>Process & download</p>
+                </div>
+                <div class="workflow-card">
+                    <h3>REPLACE</h3>
+                    <p>Update images folder</p>
+                </div>
+                <div class="workflow-card">
+                    <h3>UPDATE</h3>
+                    <p>Generate & paste code</p>
+                </div>
+                <div class="workflow-card">
+                    <h3>DEPLOY</h3>
+                    <p>Test & push to GitHub</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openFolder() {
+            alert('Please navigate to:\\n\\nAnii-Zero/images/\\n\\nand replace the image files manually.');
+        }
+
+        function commitAndPush() {
+            const commands = [
+                'git add .',
+                'git commit -m "Daily quiz update"',
+                'git push'
+            ];
+            
+            const commandText = commands.join('\\n');
+            
+            if (confirm('Copy these commands to clipboard?\\n\\n' + commandText)) {
+                navigator.clipboard.writeText(commandText).then(() => {
+                    alert('Commands copied! Run them in your terminal.');
+                });
+            }
+        }
+
+        function autoUpdate() {
+            if (confirm('Run Node.js script to auto-update quiz?\\n\\nMake sure you have placed new images in the images/ folder.')) {
+                alert('Run this command in your terminal:\\n\\nnode update-quiz.js\\n\\nOr click OK to copy the command.');
+                navigator.clipboard.writeText('node update-quiz.js');
+            }
+        }
+    </script>
+</body>
+</html>

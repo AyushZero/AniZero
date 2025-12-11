@@ -15,7 +15,25 @@ Open `index.html` in your browser to start playing!
 - **Skip** button to move to next question (0 points)
 - Maximum score: **10,000 points**
 
-## 🛠️ Creating New Quizzes
+## 🚀 Daily Update Workflow
+
+### Quick Method (Recommended)
+1. **Double-click** `daily-update.bat` - Automated workflow script
+2. Follow the prompts step by step
+3. Test and deploy
+
+### Manual Method
+1. **Open** `daily-manager.html` in your browser
+2. Follow the 4-step process
+3. Each step has quick-access buttons
+
+### Detailed Steps
+1. **Prep Tool**: Upload screenshots, name anime, crop zoomed areas
+2. **Replace Images**: Extract zip, copy 10 images to `images/` folder
+3. **Update Quiz**: Auto-generate code, paste into `script.js`
+4. **Test & Deploy**: Verify quiz works, commit and push
+
+## 🛠️ First Time Setup
 
 ### Option 1: Use the Prep Tool (Recommended)
 
